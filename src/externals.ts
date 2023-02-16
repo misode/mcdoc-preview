@@ -12,9 +12,6 @@ export const Externals: core.Externals = {
 			const entries = await reader.getEntries()
 			return await Promise.all(entries
 				.map(async e => {
-					if (e.directory) {
-						
-					}
 					const writer = new zip.Uint8ArrayWriter()
 					return {
 						data: await e.getData?.(writer),
