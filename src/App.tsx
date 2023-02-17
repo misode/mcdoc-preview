@@ -1,5 +1,7 @@
 import { Project, VanillaConfig } from '@spyglassmc/core'
 import * as mcdoc from '@spyglassmc/mcdoc'
+import { useMemo } from 'preact/hooks'
+import { StructPreview } from './components/StructPreview'
 import sourceUrl from './example.mcdoc?url'
 import { Externals } from './externals'
 import { useAsync } from './hooks/useAsync'
@@ -52,8 +54,13 @@ export function App() {
 		return res.node
 	}, [source, project])
 
+	const structs = useMemo(() => {
+		const module = node?.children.find(mcdoc.ModuleNode.is)
+		return module?.children.filter(mcdoc.StructNode.is)
+	}, [node])
+
 	return <div class='p-4'>
-		<p>{node?.type}</p>
-		<pre>{source}</pre>
+		{structs?.map(struct => <StructPreview node={struct} />)}
+		<pre class="mt-4 p-2 bg-zinc-800 rounded">{source}</pre>
 	</div>
 }
